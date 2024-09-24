@@ -124,6 +124,23 @@ transcriber-app/
 └── README.md             # Instructions
 ```
 
+## Command-Line Instructions
+
+### Running the Script
+
+The script can be run from the command line. You can provide the audio file as input and specify the output path for the Word document. The OpenAI API key can either be provided via the `--api_key` argument or set as an environment variable.
+
+### Command-Line Arguments
+
+- `--input_file`: The path to the audio file you want to transcribe (supported formats: `mp3`, `wav`, `m4a`).
+- `--output_file`: The path where the transcribed Word document should be saved.
+- `--api_key`: (Optional) Your OpenAI API key. If not provided, the script will look for the `OPENAI_API_KEY` environment variable.
+
+### Sample Command
+
+```bash
+python tests/test_transcribe.py --input_file example_audio.mp3 --output_file output_transcription.docx --api_key your_openai_api_key
+```
 ## Troubleshooting
 
 - **Missing OpenAI API Key**: Ensure you've set your OpenAI API key correctly in either the script or as an environment variable.

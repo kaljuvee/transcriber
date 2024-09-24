@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 import tempfile
 from docx import Document
 from io import BytesIO
@@ -23,12 +23,13 @@ uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav", "m4
 
 # Function to transcribe the audio using the updated API
 def transcribe_audio(file_path):
+    client = OpenAI(api_key=openai_api_key)
     with open(file_path, "rb") as audio_file:
-        transcript = openai.Audio.create_transcription(
+        transcript = client.audio.transcriptions.create(
             model="whisper-1", 
             file=audio_file
         )
-    return transcript['text']
+    return transcript.text
 
 # Function to save transcript as Word document
 def save_transcript_to_word(transcript):
