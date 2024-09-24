@@ -13,10 +13,20 @@ st.write("Upload an audio file and transcribe it using OpenAI Whisper API.")
 st.sidebar.title("API Configuration")
 openai_api_key = st.sidebar.text_input("Enter your OpenAI API Key", type="password")
 
-if openai_api_key:
-    openai.api_key = openai_api_key
+# Add a save button for the API key
+if st.sidebar.button("Save API Key"):
+    if openai_api_key:
+        st.session_state['openai_api_key'] = openai_api_key
+        st.sidebar.success("API Key saved successfully!")
+    else:
+        st.sidebar.error("Please enter an API Key before saving.")
+
+# Check if the API key is saved in the session state
+if 'openai_api_key' in st.session_state:
+    openai_api_key = st.session_state['openai_api_key']
+    st.sidebar.success("API Key is set.")
 else:
-    st.sidebar.warning("Please enter your OpenAI API Key to proceed.")
+    st.sidebar.warning("Please enter your OpenAI API Key and click 'Save API Key' to proceed.")
 
 # File uploader
 uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav", "m4a"])
@@ -45,7 +55,7 @@ def save_transcript_to_word(transcript):
 
 # Transcribe button
 if uploaded_file is not None:
-    if openai_api_key and st.button("Transcribe"):
+    if 'openai_api_key' in st.session_state and st.button("Transcribe"):
         # Save the uploaded file to a temporary location
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(uploaded_file.getbuffer())
@@ -73,3 +83,5 @@ if uploaded_file is not None:
             )
         except Exception as e:
             st.error(f"An error occurred during transcription: {e}")
+    elif 'openai_api_key' not in st.session_state:
+        st.warning("Please save your API Key in the sidebar before transcribing.")
