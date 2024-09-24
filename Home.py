@@ -5,7 +5,7 @@ from docx import Document
 from io import BytesIO
 
 # Streamlit App
-st.title("Audio Transcriber")
+st.title("Transcriber")
 
 st.write("Upload an audio file and transcribe it using OpenAI Whisper API.")
 
@@ -21,10 +21,13 @@ else:
 # File uploader
 uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav", "m4a"])
 
-# Function to transcribe the audio
+# Function to transcribe the audio using the updated API
 def transcribe_audio(file_path):
     with open(file_path, "rb") as audio_file:
-        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        transcript = openai.Audio.create_transcription(
+            model="whisper-1", 
+            file=audio_file
+        )
     return transcript['text']
 
 # Function to save transcript as Word document
